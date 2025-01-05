@@ -1,2 +1,2 @@
 # SluggansDaily
-For my daily projects
+For my daily projects or when im justed bored

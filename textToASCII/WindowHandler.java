@@ -14,7 +14,7 @@ public class WindowHandler {
 
 
     JTextArea inputArea;
-    JTextArea outputArea;
+    JEditorPane outputArea;
 
     String input;
     String output;
@@ -29,10 +29,17 @@ public class WindowHandler {
 
     private void handleTextArea() {
 
-        outputArea = new JTextArea(30, 30);
+        outputArea = new JEditorPane();
         outputArea.setMargin(new Insets(10, 10, 10, 10));
         outputArea.setEditable(false);
-        outputPanel.add(outputArea);
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14)); // Monospace font
+JScrollPane editorScrollPane = new JScrollPane(outputArea);
+        editorScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        editorScrollPane.setPreferredSize(new Dimension(250, 145));
+        editorScrollPane.setMinimumSize(new Dimension(10, 10));
+        outputPanel.add(editorScrollPane);
+
     }
 
 

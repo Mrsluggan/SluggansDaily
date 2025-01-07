@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameWindow {
 
@@ -8,15 +10,15 @@ public class GameWindow {
     private JPanel gamePanel;
     private JPanel buttonPanel;
     private JPanel[][] cellGridArray;
-
     private int cols = 30;
     private int rows = 30;
+    private boolean[][] isCell = new boolean[rows][cols];
+    private Timer gameTimer;
 
     GameLogicHandler newGameLogic = new GameLogicHandler(rows, cols);
 
     public GameWindow() {
         loadUi();
-        updateScreen(newGameLogic.getCellArray());
     }
 
     private void loadUi() {
@@ -34,6 +36,22 @@ public class GameWindow {
                 cell.setBackground(Color.BLACK);
                 cell.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 cellGridArray[x][y] = cell;
+                JButton cellButton = new JButton();
+                cellButton.setOpaque(false);
+                cellButton.setContentAreaFilled(false);
+                cellButton.setBorderPainted(false);
+                int finalX = x;
+                int finalY = y;
+                cellButton.addActionListener(e -> {
+                    if (cell.getBackground().equals(Color.black)) {
+                        cell.setBackground(Color.GREEN);
+                        isCell[finalX][finalY] = true;
+                    } else {
+                        cell.setBackground(Color.BLACK);
+                        isCell[finalX][finalY] = false;
+                    }
+                });
+                cell.add(cellButton);
                 gamePanel.add(cell);
             }
         }
@@ -64,11 +82,35 @@ public class GameWindow {
         buttonPanel = new JPanel();
 
         JButton startButton = new JButton("Start");
-        startButton.addActionListener(e -> updateScreen(newGameLogic.updateGame()));
+        startButton.addActionListener(e -> {
+            newGameLogic.setUpGame(isCell);
+            startGameLoop();
+        });
         buttonPanel.add(startButton);
 
         JButton stopButton = new JButton("Stop");
+        stopButton.addActionListener(e -> stopGameLoop());
         buttonPanel.add(stopButton);
+    }
+
+    private void startGameLoop() {
+        if (gameTimer != null && gameTimer.isRunning()) {
+            return; // Avoid multiple timers running
+        }
+        gameTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cell[][] updatedCells = newGameLogic.updateGame();
+                updateScreen(updatedCells);
+            }
+        });
+        gameTimer.start();
+    }
+
+    private void stopGameLoop() {
+        if (gameTimer != null) {
+            gameTimer.stop();
+        }
     }
 
 

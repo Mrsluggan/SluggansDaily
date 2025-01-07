@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class GameLogicHandler {
 
 
@@ -9,8 +11,7 @@ public class GameLogicHandler {
     public GameLogicHandler(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        setUpGame();
-        updateGame();
+
     }
 
     private void printGame() {
@@ -30,20 +31,23 @@ public class GameLogicHandler {
     }
 
 
-    private void setUpGame() {
+    public void setUpGame(boolean[][] isCell) {
         rows = 30;
         cols = 30;
         cellArray = new Cell[rows][cols];
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
+                if (isCell[x][y]){
+                    cellArray[x][y] = new Cell(x, y, true);
 
+                }else {
                     cellArray[x][y] = new Cell(x, y, false);
+
+                }
 
             }
         }
-        cellArray[1][1] = new Cell(1,1,true);
-        cellArray[1][2] = new Cell(1,1,true);
-        cellArray[1][3] = new Cell(1,1,true);
+
 
 
     }
@@ -81,7 +85,6 @@ public class GameLogicHandler {
                 createNewGeneration(newGenerationArray[x][y]);
             }
         }
-        printGame();
 
         cellArray = newGenerationArray;
         return cellArray;

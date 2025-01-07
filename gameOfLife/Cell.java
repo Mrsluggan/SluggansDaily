@@ -3,13 +3,19 @@ public class Cell {
     private int x;
     private int y;
     private boolean alive;
-    private int neigbours;
+    private int neigboursAlive;
+    private int neigboursDead;
+
+
+
     public Cell(int x,int y,boolean alive){
         this.x = x;
         this.y = y;
-        this.neigbours = 0;
+        this.neigboursAlive = neigboursAlive;
+        this.neigboursDead = neigboursDead;
         this.alive = alive;
     }
+
 
     public int getX() {
         return x;
@@ -35,11 +41,19 @@ public class Cell {
         this.alive = alive;
     }
 
-    public int getNeigbours() {
-        return neigbours;
+    public int getNeigboursAlive() {
+        return neigboursAlive;
     }
 
-    public void setNeigbours(int neigbours) {
-        this.neigbours = neigbours;
+    public void setNeigboursAlive(int neigboursAlive) {
+        this.neigboursAlive = neigboursAlive;
+    }
+
+    public int getNeigboursDead() {
+        return neigboursDead;
+    }
+
+    public void setNeigboursDead(int neigboursDead) {
+        this.neigboursDead = neigboursDead;
     }
 }

@@ -97,7 +97,7 @@ public class GameWindow {
         if (gameTimer != null && gameTimer.isRunning()) {
             return; // Avoid multiple timers running
         }
-        gameTimer = new Timer(1000, new ActionListener() {
+        gameTimer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Cell[][] updatedCells = newGameLogic.updateGame();

@@ -24,10 +24,8 @@ public class GameWindow {
 
     private void loadUi() {
         frame = new JFrame("Sluggans Game of Life");
-        frame.setLayout(new GridLayout(3, 1));
-
         header = new JPanel();
-        header.setLayout(new GridLayout(2,1));
+        header.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         generationLabel = new JLabel("Generation: 0", JLabel.CENTER);
         header.add(generationLabel);
         gamePanel = new JPanel(new GridLayout(rows, cols));
@@ -40,10 +38,19 @@ public class GameWindow {
                 cell.setBackground(Color.BLACK);
                 cell.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 cellGridArray[x][y] = cell;
+        
+                // Skapa en liten knapp
                 JButton cellButton = new JButton();
                 cellButton.setOpaque(false);
                 cellButton.setContentAreaFilled(false);
                 cellButton.setBorderPainted(false);
+                cellButton.setSize(cell.getPreferredSize());
+                cell.setLayout(new BorderLayout());
+                cell.add(cellButton, BorderLayout.CENTER);
+        
+                // Sätt knappens storlek
+                cell.setPreferredSize(new Dimension(20, 20)); // Justera storleken här
+        
                 int finalX = x;
                 int finalY = y;
                 cellButton.addActionListener(e -> {
@@ -55,11 +62,12 @@ public class GameWindow {
                         isCell[finalX][finalY] = false;
                     }
                 });
-
+        
                 cell.add(cellButton);
                 gamePanel.add(cell);
             }
         }
+        
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(header, BorderLayout.NORTH);
@@ -81,6 +89,18 @@ public class GameWindow {
                 }
             }
         }
+        generationLabel.setText("Generation: " + newGameLogic.getGeneration());
+
+    }
+    public void resetGame() {
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                isCell[x][y] = false;
+                cellGridArray[x][y].setBackground(Color.BLACK);
+            }
+        }
+        newGameLogic.setGeneration(0);
+        generationLabel.setText("Generation: 0");
     }
 
     private void handleButtons() {
@@ -96,6 +116,9 @@ public class GameWindow {
         JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> stopGameLoop());
         buttonPanel.add(stopButton);
+        JButton reseButton = new JButton("Reset");
+        reseButton.addActionListener(e -> resetGameLoop());
+        buttonPanel.add(reseButton);
     }
 
     private void startGameLoop() {
@@ -107,7 +130,6 @@ public class GameWindow {
             public void actionPerformed(ActionEvent e) {
                 Cell[][] updatedCells = newGameLogic.updateGame();
                 updateScreen(updatedCells);
-                generationLabel.setText("Generation: " + newGameLogic.getGeneration());
             }
         });
         gameTimer.start();
@@ -115,6 +137,12 @@ public class GameWindow {
 
     private void stopGameLoop() {
         if (gameTimer != null) {
+            gameTimer.stop();
+        }
+    }
+    private void resetGameLoop() {
+        if (gameTimer != null) {
+            resetGame();
             gameTimer.stop();
         }
     }

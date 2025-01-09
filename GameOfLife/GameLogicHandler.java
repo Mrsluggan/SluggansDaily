@@ -14,26 +14,8 @@ public class GameLogicHandler {
 
     }
 
-    private void printGame() {
-        for (int x = 0; x < cols; x++) {
-            for (int y = 0; y < rows; y++) {
-                if (cellArray[x][y].isAlive()) {
-                    System.out.print(" X ");
-                } else {
-                    System.out.print(" . ");
-                }
-
-            }
-            System.out.println("");
-        }
-        System.out.println("Det var denna generationen");
-
-    }
-
-
     public void setUpGame(boolean[][] isCell) {
-        rows = 30;
-        cols = 30;
+
         cellArray = new Cell[rows][cols];
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
@@ -52,25 +34,6 @@ public class GameLogicHandler {
 
     }
 
-    private void checkNeighbour() {
-
-        for (int x = 0; x < cols; x++) {
-            for (int y = 0; y < rows; y++) {
-                if (cellArray[x][y].isAlive()) {
-                    System.out.println("här finns en cell som lever: (" + x + ", " + y + ")");
-                    check(x, y);
-
-                } else {
-                    System.out.println("här finns en cell som är död: (" + x + ", " + y + ")");
-                    check(x, y);
-
-                }
-
-            }
-        }
-    }
-
-
     public Cell[][] updateGame() {
 
         Cell[][] newGenerationArray = new Cell[rows][cols];
@@ -85,7 +48,7 @@ public class GameLogicHandler {
                 createNewGeneration(newGenerationArray[x][y]);
             }
         }
-
+        setGeneration(generation + 1);
         cellArray = newGenerationArray;
         return cellArray;
     }

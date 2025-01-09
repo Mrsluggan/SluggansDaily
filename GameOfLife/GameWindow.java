@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class GameWindow {
 
     private JFrame frame;
-    private JLabel header;
+    private JPanel header;
     private JPanel gamePanel;
     private JPanel buttonPanel;
     private JPanel[][] cellGridArray;
@@ -14,6 +14,7 @@ public class GameWindow {
     private int rows = 30;
     private boolean[][] isCell = new boolean[rows][cols];
     private Timer gameTimer;
+    private JLabel generationLabel;
 
     GameLogicHandler newGameLogic = new GameLogicHandler(rows, cols);
 
@@ -23,9 +24,12 @@ public class GameWindow {
 
     private void loadUi() {
         frame = new JFrame("Sluggans Game of Life");
-        frame.setLayout(new BorderLayout());
+        frame.setLayout(new GridLayout(3, 1));
 
-        header = new JLabel("Welcome to Sluggans Game of Life", JLabel.CENTER);
+        header = new JPanel();
+        header.setLayout(new GridLayout(2,1));
+        generationLabel = new JLabel("Generation: 0", JLabel.CENTER);
+        header.add(generationLabel);
         gamePanel = new JPanel(new GridLayout(rows, cols));
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cellGridArray = new JPanel[cols][rows];
@@ -51,6 +55,7 @@ public class GameWindow {
                         isCell[finalX][finalY] = false;
                     }
                 });
+
                 cell.add(cellButton);
                 gamePanel.add(cell);
             }
@@ -102,6 +107,7 @@ public class GameWindow {
             public void actionPerformed(ActionEvent e) {
                 Cell[][] updatedCells = newGameLogic.updateGame();
                 updateScreen(updatedCells);
+                generationLabel.setText("Generation: " + newGameLogic.getGeneration());
             }
         });
         gameTimer.start();
